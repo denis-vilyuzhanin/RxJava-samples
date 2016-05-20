@@ -1,6 +1,7 @@
 package rxjava.sample;
 
 import rx.Observable;
+import rx.observables.ConnectableObservable;
 import rxjava.sample.services.CurrencyExchangeService;
 import rxjava.sample.services.ExchangeRate;
 
@@ -13,14 +14,17 @@ public class CurrencyExchangeObserving {
 		exchangeService.start();
 		
 		Observable<ExchangeRate> rateOriginal = exchangeService.currentExchagneRate();
-		Observable<ExchangeRate> rate = rateOriginal.map(r -> {
+		
+		Observable<ExchangeRate> rate;
+		//ConnectableObservable<ExchangeRate> rate;
+		rate = rateOriginal.map(r -> {
 			double newRate = r.getRate();
 			if (previousRate > r.getRate()) {
 				r.setRate(newRate * -1);
 			} 
 			previousRate = newRate;
 			return r;
-		});
+		});//.publish();
 		
 		rate.subscribe(currentRate -> System.out.println("1: " + currentRate));
 		Thread.sleep(2000);
@@ -33,6 +37,7 @@ public class CurrencyExchangeObserving {
 		
 		
 		System.out.println("Running ...");
+		//rate.connect();
 		Thread.sleep(20000);
 		exchangeService.interrupt();
 	}

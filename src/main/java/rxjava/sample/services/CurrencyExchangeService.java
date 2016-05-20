@@ -53,4 +53,9 @@ public class CurrencyExchangeService extends Thread {
 		});
 	}
 	
+	public Observable<ExchangeRate> exchangeForPeriod() {
+		
+		return null;
+	}
+	
 }
