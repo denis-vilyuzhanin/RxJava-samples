@@ -1,6 +1,7 @@
 package rxjava.sample;
 
 import rx.Observable;
+import rxjava.sample.work.Work;
 
 public class SingleValueObserving {
 
@@ -10,12 +11,10 @@ public class SingleValueObserving {
 		Observable<String> someString  = Observable.just("value");
 		
 		
-		someString.subscribe(s -> System.out.println(s), 
-				             e->e.printStackTrace(), 
-				             () -> System.out.println("Done 1"));
+		someString.subscribe(v -> Work.longComputation("task1 " + v, () -> v));
 		System.out.println("----");
-		someString.subscribe(s -> System.out.println(s), 
-	             e->e.printStackTrace(), 
-	             () -> System.out.println("Done 2"));
+		someString.subscribe(v -> Work.longComputation("task2 " + v, () -> v));
+
+		Work.waitComputation(2);
 	}
 }
